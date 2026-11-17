@@ -4,7 +4,7 @@ A plain-language guide for parish staff managing content on sanroqueparish.ph th
 
 ## Logging In
 
-1. Go to `https://[your-site-domain]/studio`
+1. Go to `https://san-roque-sampaloc.sanity.studio`
 2. Sign in with the email invited by the developer (Google sign-in or email/password, depending on how your account was set up)
 3. You'll land on the Studio desk — a list of content types on the left (Parish Settings, News, Events, Homilies, Ministries, Clergy, Sacraments, FAQ)
 

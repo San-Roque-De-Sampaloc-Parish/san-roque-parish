@@ -7,8 +7,8 @@ Developer: NEXFORA Digital Innovation
 ## Stack
 
 - Next.js (App Router, TypeScript, Tailwind CSS v4)
-- Sanity CMS v5 (embedded studio at `/studio`)
-- Vercel (deployment)
+- Sanity CMS v5 (Studio hosted at https://san-roque-sampaloc.sanity.studio)
+- Cloudflare Workers (deployment, via @opennextjs/cloudflare)
 - Resend, Cloudflare Turnstile, Sentry, Playwright — approved but not yet added
 
 ## Do Not Introduce
@@ -31,7 +31,7 @@ WordPress, Supabase, Firebase, Express, separate backend, custom CMS, public use
 
 - Windows 11 (PowerShell, no WSL)
 - Use `npm.cmd` / `npx.cmd` instead of bare `npm` / `npx`
-- Sanity Studio is embedded at `src/app/studio/[[...tool]]/page.tsx`
+- Sanity Studio is hosted at https://san-roque-sampaloc.sanity.studio (not embedded); deploy with `npm.cmd run studio:deploy`
 - Sanity schemas live in `src/sanity/schemaTypes/`
 - Environment variables go in `.env.local` (gitignored); document in `.env.example`
 

@@ -7,7 +7,7 @@ How to get a local copy of the codebase and content, and how to restore from one
 ### Repository
 
 - GitHub: `https://github.com/sanroquedesampaloc/san-roque-parish`
-- Main branch: `main` — this is what Vercel deploys from
+- Main branch: `main` — this is what Cloudflare Workers Builds deploys from
 
 ### Clone
 
@@ -30,7 +30,7 @@ Copy `.env.example` to `.env.local` and fill in the values (see the Environment 
 npm run dev
 ```
 
-The site runs at `http://localhost:3000`, and the Studio at `http://localhost:3000/studio`.
+The site runs at `http://localhost:3000`, and the Studio runs separately with `npx.cmd sanity dev` (http://localhost:3333). Deploy Studio changes with `npm.cmd run studio:deploy`.
 
 To type-check, lint, and build for production:
 
@@ -107,6 +107,6 @@ Record this separately (not in version control) and keep it current as staff cha
 
 - GitHub repository ownership/admin access
 - Sanity project ownership and member list
-- Vercel project ownership and environment variable access
+- Cloudflare account ownership and environment variable access
 - Domain registrar and DNS access
 - Resend and Cloudflare Turnstile account access

@@ -1,15 +1,17 @@
-'use client'
-
 import {visionTool} from '@sanity/vision'
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 
-import {apiVersion, dataset, projectId} from './src/sanity/env'
 import {schema} from './src/sanity/schemaTypes'
 import {structure} from './src/sanity/structure'
 
+// Hosted on *.sanity.studio, which only exposes SANITY_STUDIO_* env vars, so this
+// can't use ./src/sanity/env. Public values, same as NEXT_PUBLIC_SANITY_* in .env.local.
+const projectId = 'fth8wagm'
+const dataset = 'production'
+const apiVersion = '2026-10-05'
+
 export default defineConfig({
-  basePath: '/studio',
   projectId,
   dataset,
   schema,

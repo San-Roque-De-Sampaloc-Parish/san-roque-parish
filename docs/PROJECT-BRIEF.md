@@ -12,7 +12,7 @@ NEXFORA Digital Innovation
 
 - Parishioners seeking Mass times, announcements, and event information
 - Visitors looking for sacrament requirements or parish contact details
-- Parish staff managing content through Sanity Studio at `/studio`
+- Parish staff managing content through Sanity Studio at `https://san-roque-sampaloc.sanity.studio`
 
 ## Phases
 
@@ -38,4 +38,4 @@ NEXFORA Digital Innovation
 
 - Playwright end-to-end tests
 - Performance optimization
-- Vercel deployment
+- Cloudflare Workers deployment

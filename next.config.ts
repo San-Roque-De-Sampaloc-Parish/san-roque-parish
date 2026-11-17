@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 
 const csp = [
   "default-src 'self'",
@@ -40,18 +41,13 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: "/((?!studio).*)",
+        source: "/(.*)",
         headers: securityHeaders,
-      },
-      {
-        source: "/studio/:path*",
-        headers: [
-          { key: "X-Content-Type-Options", value: "nosniff" },
-          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-        ],
       },
     ];
   },
 };
 
 export default nextConfig;
+
+initOpenNextCloudflareForDev();

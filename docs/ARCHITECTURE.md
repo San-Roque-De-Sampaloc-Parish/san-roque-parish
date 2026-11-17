@@ -7,8 +7,8 @@
 | Framework | Next.js 16 (App Router) |
 | Language | TypeScript (strict) |
 | Styling | Tailwind CSS v4 |
-| CMS | Sanity v5 (embedded studio) |
-| Deployment | Vercel |
+| CMS | Sanity v5 (Studio hosted at san-roque-sampaloc.sanity.studio) |
+| Deployment | Cloudflare Workers via `@opennextjs/cloudflare` |
 
 ## Directory Structure
 
@@ -16,7 +16,6 @@
 san-roque-parish/
 ├── src/
 │   ├── app/                  # Next.js App Router pages
-│   │   └── studio/           # Embedded Sanity Studio route
 │   └── sanity/
 │       ├── env.ts            # Sanity environment config
 │       ├── lib/              # Client, image helper, live API
@@ -33,7 +32,7 @@ san-roque-parish/
 
 ## Data Flow
 
-1. Parish staff create/edit content in Sanity Studio at `/studio`
+1. Parish staff create/edit content in Sanity Studio at `https://san-roque-sampaloc.sanity.studio`
 2. Content is stored in Sanity's hosted dataset (`production`)
 3. Next.js fetches content via `sanityFetch` (GROQ queries through `next-sanity`)
 4. Pages render as Server Components with live content updates via `SanityLive`
@@ -87,7 +86,7 @@ src/components/ui/
 ### Spam Protection
 
 - **Turnstile**: Cloudflare Turnstile widget on both forms; tokens verified server-side
-- **Rate limiting**: In-memory fixed window — 5 submissions per 15-minute window per IP per form type. Resets on cold start (serverless limitation). For stricter enforcement, use Vercel KV or Upstash Redis.
+- **Rate limiting**: In-memory fixed window — 5 submissions per 15-minute window per IP per form type. Resets on cold start (serverless limitation). For stricter enforcement, use a Durable Object or Upstash Redis.
 
 ### Environment Variables
 

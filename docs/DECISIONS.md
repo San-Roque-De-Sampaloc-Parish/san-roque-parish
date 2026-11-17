@@ -1,10 +1,10 @@
 # Architecture Decisions
 
-## ADR-001: Embedded Sanity Studio
+## ADR-001: Embedded Sanity Studio (superseded by ADR-014)
 
 Embed Sanity Studio within the Next.js app at `/studio` using `next-sanity`.
 
-**Rationale**: Single deployment to Vercel. Parish staff access the studio through the same domain. No additional hosting needed.
+**Rationale**: Single deployment (Cloudflare Workers, see ADR-013). Parish staff access the studio through the same domain. No additional hosting needed.
 
 ## ADR-002: Singleton for Parish Settings
 
@@ -46,7 +46,7 @@ Use React Server Actions (via `useActionState`) instead of API Route Handlers fo
 
 Use an in-memory `Map` for rate limiting form submissions instead of an external store.
 
-**Rationale**: No paid dependency required. Provides baseline protection against rapid repeated submissions within a single serverless instance lifetime. The primary spam defense is Cloudflare Turnstile — rate limiting is a secondary layer. For production-grade rate limiting that survives cold starts, upgrade to Vercel KV or Upstash Redis.
+**Rationale**: No paid dependency required. Provides baseline protection against rapid repeated submissions within a single serverless instance lifetime. The primary spam defense is Cloudflare Turnstile — rate limiting is a secondary layer. For production-grade rate limiting that survives cold starts, upgrade to a Durable Object or Upstash Redis.
 
 ## ADR-009: No Database Storage for Form Submissions
 
@@ -71,3 +71,15 @@ The `/columbarium` page is linked from the mobile nav drawer and the footer's Qu
 `/` and `/live` fetch `liveStream` through a dedicated `fetchLiveStreamData()` (plain `client.fetch()`, `useCdn: false`, `next: { revalidate: 30 }`) instead of the site's usual `sanityFetch` (Sanity's Live Content API, `next-sanity/live`).
 
 **Rationale**: Proven empirically during the pre-launch audit (publish a change in Sanity with zero browser tabs open anywhere, then load the page fresh — the Live Content API never caught up, because its on-demand revalidation only fires when a connected `<SanityLive />` client observes a mutation event; a cold server with no visitors at publish time stays stale indefinitely, and even a connected client didn't reliably flip within the target window in repeated testing). The underlying `sanityFetch` also hardcodes its fetch to `revalidate: false`, so a page-level `export const revalidate` alone would not have fixed it — the fetch itself needed a numeric revalidate. This fetch is intentionally scoped to only the two Live Mass fields; every other `parishSettings` field (address, schedules, etc.) still goes through the normal on-demand `sanityFetch` path, so only Live Mass pays the cost of a 30s-interval background refetch, not the rest of the site.
+
+## ADR-013: Host on Cloudflare Workers Instead of Vercel
+
+Deploy with `@opennextjs/cloudflare` to a Cloudflare Worker (`wrangler.jsonc`, `open-next.config.ts`). Next.js was raised to 16.4.6 because the adapter's peer range excludes 16.0–16.4.4.
+
+**Rationale**: Parish chose Cloudflare (domain, DNS, Turnstile already there). Caching uses R2 (incremental cache) + a Durable Object queue (time-based ISR, ADR-012) + a sharded Durable Object tag cache (Sanity Live's `revalidateTag`) — without the latter two, schedules would go stale. The embedded Studio (ADR-001) put the Worker at ~4.5 MiB gzipped, over the free plan's 3 MiB limit; see ADR-014. OpenNext does not guarantee Windows support, so production builds run on Cloudflare Workers Builds (Linux), not locally.
+
+## ADR-014: Studio Hosted on sanity.studio, Not Embedded
+
+Removed the `/studio` route. The Studio is deployed with `npm.cmd run studio:deploy` (`sanity deploy`) to https://san-roque-sampaloc.sanity.studio.
+
+**Rationale**: Keeps the Cloudflare Worker at ~1.5 MiB gzipped, inside the Workers free plan (3 MiB), instead of paying $5/month for the embedded Studio. Sanity hosts the Studio free and allows its own CORS origin automatically. `sanity.config.ts` and `sanity.cli.ts` hardcode the (public) project ID and dataset, because a sanity.studio build only exposes `SANITY_STUDIO_*` env vars. Schema changes now need a Studio redeploy in addition to the site deploy.
