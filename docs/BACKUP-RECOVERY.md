@@ -8,6 +8,7 @@ How to get a local copy of the codebase and content, and how to restore from one
 
 - GitHub: `https://github.com/sanroquedesampaloc/san-roque-parish`
 - Main branch: `main` — this is what Cloudflare Workers Builds deploys from
+- Workers Builds commands: `npm run build:cloudflare` (build) and `npx wrangler deploy` (deploy)
 
 ### Clone
 
