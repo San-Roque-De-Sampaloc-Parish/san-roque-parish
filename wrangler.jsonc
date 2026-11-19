@@ -7,7 +7,7 @@
   "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
   "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "san-roque-parish" }],
   // Incremental cache uses KV; ISR queue and Sanity Live tag cache use Durable Objects.
-  "kv_namespaces": [{ "binding": "NEXT_INC_CACHE_KV", "id": "9b53de798f174997ba5d3a97e27c0fb5" }],
+  "kv_namespaces": [{ "binding": "NEXT_INC_CACHE_KV", "id": "36464fc3b53448d19566e6ee2dd82c63" }],
   "durable_objects": {
     "bindings": [
       { "name": "NEXT_CACHE_DO_QUEUE", "class_name": "DOQueueHandler" },
