@@ -32,6 +32,17 @@ test.describe("CSP runtime verification", () => {
     { path: "/live", label: "live (facebook embed)" },
   ];
 
+  test("contact CSP allows Turnstile frames", async ({ page }) => {
+    const response = await page.goto("/contact");
+    const csp = response?.headers()["content-security-policy"] ?? "";
+    const frameSrc = csp
+      .split(";")
+      .map((directive) => directive.trim())
+      .find((directive) => directive.startsWith("frame-src "));
+
+    expect(frameSrc).toContain("https://challenges.cloudflare.com");
+  });
+
   for (const { path, label } of pagesToCheck) {
     test(`no CSP violations on ${label}`, async ({ page }) => {
       const cspViolations: string[] = [];
