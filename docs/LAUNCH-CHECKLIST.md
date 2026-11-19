@@ -43,6 +43,11 @@ Status key: ✅ Ready · ⚠️ Needs confirmation/action · ❌ Blocked
 - [ ] Create a Cloudflare Turnstile site for the production domain
 - [ ] Set `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` in Cloudflare (build + runtime variables)
 
+## CACHE
+
+- [x] Workers KV namespace created and bound as `NEXT_INC_CACHE_KV` in `wrangler.jsonc`
+- [ ] Confirm KV namespace binding is available to the production Worker
+
 ## SANITY
 
 - [ ] Confirm `NEXT_PUBLIC_SANITY_PROJECT_ID` and `NEXT_PUBLIC_SANITY_DATASET=production` are set in Cloudflare (build + runtime variables) (not `preview`)

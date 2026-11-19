@@ -6,8 +6,8 @@
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
   "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "san-roque-parish" }],
-  // ISR + revalidateTag (Sanity Live) storage — see open-next.config.ts
-  "r2_buckets": [{ "binding": "NEXT_INC_CACHE_R2_BUCKET", "bucket_name": "san-roque-parish-cache" }],
+  // Incremental cache uses KV; ISR queue and Sanity Live tag cache use Durable Objects.
+  "kv_namespaces": [{ "binding": "NEXT_INC_CACHE_KV", "id": "9b53de798f174997ba5d3a97e27c0fb5" }],
   "durable_objects": {
     "bindings": [
       { "name": "NEXT_CACHE_DO_QUEUE", "class_name": "DOQueueHandler" },

@@ -76,7 +76,7 @@ The `/columbarium` page is linked from the mobile nav drawer and the footer's Qu
 
 Deploy with `@opennextjs/cloudflare` to a Cloudflare Worker (`wrangler.jsonc`, `open-next.config.ts`). Next.js was raised to 16.4.6 because the adapter's peer range excludes 16.0–16.4.4.
 
-**Rationale**: Parish chose Cloudflare (domain, DNS, Turnstile already there). Caching uses R2 (incremental cache) + a Durable Object queue (time-based ISR, ADR-012) + a sharded Durable Object tag cache (Sanity Live's `revalidateTag`) — without the latter two, schedules would go stale. The embedded Studio (ADR-001) put the Worker at ~4.5 MiB gzipped, over the free plan's 3 MiB limit; see ADR-014. OpenNext does not guarantee Windows support, so production builds run on Cloudflare Workers Builds (Linux), not locally.
+**Rationale**: Parish chose Cloudflare (domain, DNS, Turnstile already there). Caching uses Workers KV (incremental cache) + a Durable Object queue (time-based ISR, ADR-012) + a sharded Durable Object tag cache (Sanity Live's `revalidateTag`) — without the latter two, schedules would go stale. KV is eventually consistent, so cache updates may take time to propagate globally. The embedded Studio (ADR-001) put the Worker at ~4.5 MiB gzipped, over the free plan's 3 MiB limit; see ADR-014. OpenNext does not guarantee Windows support, so production builds run on Cloudflare Workers Builds (Linux), not locally.
 
 ## ADR-014: Studio Hosted on sanity.studio, Not Embedded
 

@@ -83,6 +83,12 @@ src/components/ui/
 - All user-supplied content is HTML-escaped before inclusion
 - Recipient addresses are configured via environment variables, never hardcoded
 
+### Cloudflare Caching
+
+- Incremental cache: Workers KV (`NEXT_INC_CACHE_KV` binding)
+- Time-based ISR queue and Sanity Live tag revalidation: Durable Objects
+- KV is eventually consistent; cache updates may take time to propagate globally
+
 ### Spam Protection
 
 - **Turnstile**: Cloudflare Turnstile widget on both forms; tokens verified server-side
