@@ -2,6 +2,11 @@ import "server-only";
 
 const VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
+type SiteverifyResponse = {
+  success?: unknown;
+  "error-codes"?: unknown;
+};
+
 export async function verifyTurnstileToken(token: string): Promise<boolean> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
   if (!secret) {
@@ -9,17 +14,44 @@ export async function verifyTurnstileToken(token: string): Promise<boolean> {
     return false;
   }
 
+  let response: Response;
   try {
-    const response = await fetch(VERIFY_URL, {
+    response = await fetch(VERIFY_URL, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ secret, response: token }),
     });
-
-    const data = (await response.json()) as { success: boolean };
-    return data.success === true;
   } catch {
     console.error("Turnstile verification request failed");
     return false;
   }
+
+  if (!response.ok) {
+    console.error("Turnstile verification returned HTTP error", response.status);
+    return false;
+  }
+
+  let data: SiteverifyResponse;
+  try {
+    const payload: unknown = await response.json();
+    if (typeof payload !== "object" || payload === null) {
+      console.error("Turnstile verification returned an invalid response");
+      return false;
+    }
+    data = payload;
+  } catch {
+    console.error("Turnstile verification response could not be parsed");
+    return false;
+  }
+
+  if (data.success === true) return true;
+
+  const errorCodes = Array.isArray(data["error-codes"])
+    ? data["error-codes"].filter(
+        (code): code is string =>
+          typeof code === "string" && /^[a-z0-9-]+$/.test(code)
+      )
+    : [];
+  console.error("Turnstile token rejected", errorCodes);
+  return false;
 }
