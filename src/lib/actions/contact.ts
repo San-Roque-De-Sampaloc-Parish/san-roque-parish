@@ -45,7 +45,10 @@ export async function submitContactForm(
     };
   }
 
-  const tokenValid = await verifyTurnstileToken(parsed.data.turnstileToken);
+  const tokenValid = await verifyTurnstileToken(
+    parsed.data.turnstileToken,
+    "contact"
+  );
   if (!tokenValid) {
     return {
       status: "error",

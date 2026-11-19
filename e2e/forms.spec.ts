@@ -1,7 +1,25 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
+
+async function mockTurnstile(page: Page) {
+  await page.route("https://challenges.cloudflare.com/turnstile/v0/api.js**", (route) =>
+    route.fulfill({
+      contentType: "application/javascript",
+      body: `window.turnstile = {
+        render: function (_container, options) {
+          window.__turnstileAction = options.action;
+          return "test-widget";
+        },
+        reset: function () {},
+        remove: function () {}
+      };
+      window.onTurnstileLoad();`,
+    })
+  );
+}
 
 test.describe("Contact form", () => {
   test.beforeEach(async ({ page }) => {
+    await mockTurnstile(page);
     await page.goto("/contact");
   });
 
@@ -17,6 +35,18 @@ test.describe("Contact form", () => {
     const submit = page.getByRole("button", { name: /send message/i });
     await expect(submit).toBeVisible();
     await expect(submit).toBeEnabled();
+  });
+
+  test("renders Turnstile for the contact action", async ({ page }) => {
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () =>
+            (window as Window & { __turnstileAction?: string })
+              .__turnstileAction
+        )
+      )
+      .toBe("contact");
   });
 
   test("fields have correct input types", async ({ page }) => {
@@ -44,6 +74,7 @@ test.describe("Contact form", () => {
 
 test.describe("Prayer request form", () => {
   test.beforeEach(async ({ page }) => {
+    await mockTurnstile(page);
     await page.goto("/prayer-request");
   });
 
@@ -57,6 +88,18 @@ test.describe("Prayer request form", () => {
     await expect(
       page.getByRole("button", { name: /submit prayer request/i })
     ).toBeVisible();
+  });
+
+  test("renders Turnstile for the prayer-request action", async ({ page }) => {
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () =>
+            (window as Window & { __turnstileAction?: string })
+              .__turnstileAction
+        )
+      )
+      .toBe("prayer-request");
   });
 
   test("wantsContact checkbox makes email required", async ({ page }) => {

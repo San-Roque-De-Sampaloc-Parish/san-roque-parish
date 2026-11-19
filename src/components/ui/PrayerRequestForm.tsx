@@ -178,7 +178,7 @@ export function PrayerRequestForm() {
 
           {/* Turnstile */}
           <div>
-            <TurnstileWidget ref={turnstileRef} />
+            <TurnstileWidget ref={turnstileRef} action="prayer-request" />
             <FieldError id="prayer-turnstile-error" errors={state.fieldErrors?.turnstileToken} />
           </div>
 

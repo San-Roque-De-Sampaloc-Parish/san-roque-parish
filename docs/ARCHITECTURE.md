@@ -103,4 +103,5 @@ src/components/ui/
 | `PRAYER_TO_EMAIL` | Server | Parish recipient for prayer requests |
 | `EMAIL_FROM` | Server | Verified sender address in Resend |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Client | Cloudflare Turnstile dashboard |
-| `TURNSTILE_SECRET_KEY` | Server | Cloudflare Turnstile dashboard |
+| `TURNSTILE_SECRET_KEY` | Server | Cloudflare Worker secret |
+| `TURNSTILE_HOSTNAMES` | Server | Comma-separated exact hostnames accepted by Turnstile; production must not include local hosts |

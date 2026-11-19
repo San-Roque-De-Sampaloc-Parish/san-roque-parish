@@ -186,7 +186,7 @@ export function ContactForm({
 
           {/* Turnstile */}
           <div>
-            <TurnstileWidget ref={turnstileRef} />
+            <TurnstileWidget ref={turnstileRef} action="contact" />
             <FieldError id="contact-turnstile-error" errors={state.fieldErrors?.turnstileToken} />
           </div>
 

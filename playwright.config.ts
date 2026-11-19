@@ -22,5 +22,8 @@ export default defineConfig({
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,
+    env: {
+      NEXT_PUBLIC_TURNSTILE_SITE_KEY: "0x4AAAAAAGIaMmdn8SCVlf3R",
+    },
   },
 });

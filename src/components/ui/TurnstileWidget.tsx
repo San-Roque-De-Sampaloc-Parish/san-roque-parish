@@ -9,6 +9,7 @@ declare global {
         container: HTMLElement,
         options: {
           sitekey: string;
+          action: string;
           callback: (token: string) => void;
           "expired-callback"?: () => void;
           "error-callback"?: () => void;
@@ -26,8 +27,10 @@ export interface TurnstileHandle {
   reset: () => void;
 }
 
-export const TurnstileWidget = forwardRef<TurnstileHandle>(
-  function TurnstileWidget(_props, ref) {
+export const TurnstileWidget = forwardRef<
+  TurnstileHandle,
+  { action: string }
+>(function TurnstileWidget({ action }, ref) {
     const containerRef = useRef<HTMLDivElement>(null);
     const widgetIdRef = useRef<string | null>(null);
     const scriptLoadedRef = useRef(false);
@@ -49,12 +52,13 @@ export const TurnstileWidget = forwardRef<TurnstileHandle>(
 
       widgetIdRef.current = window.turnstile.render(containerRef.current, {
         sitekey,
+        action,
         callback: () => {},
         "expired-callback": () => {},
         "error-callback": () => {},
         theme: "light",
       });
-    }, []);
+    }, [action]);
 
     useEffect(() => {
       // Skip injecting Cloudflare's script entirely when no site key is
@@ -99,5 +103,4 @@ export const TurnstileWidget = forwardRef<TurnstileHandle>(
     }, [renderWidget]);
 
     return <div ref={containerRef} className="mt-2" />;
-  }
-);
+});

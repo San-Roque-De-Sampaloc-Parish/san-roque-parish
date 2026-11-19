@@ -44,7 +44,10 @@ export async function submitPrayerRequest(
     };
   }
 
-  const tokenValid = await verifyTurnstileToken(parsed.data.turnstileToken);
+  const tokenValid = await verifyTurnstileToken(
+    parsed.data.turnstileToken,
+    "prayer-request"
+  );
   if (!tokenValid) {
     return {
       status: "error",

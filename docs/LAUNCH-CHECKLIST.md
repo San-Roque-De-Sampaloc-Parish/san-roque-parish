@@ -40,8 +40,9 @@ Status key: ✅ Ready · ⚠️ Needs confirmation/action · ❌ Blocked
 
 ## TURNSTILE
 
-- [ ] Create a Cloudflare Turnstile site for the production domain
-- [ ] Set `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` in Cloudflare (build + runtime variables)
+- [ ] Confirm the existing widget allows `san-roque-parish.srdsp1987.workers.dev` and local development hosts
+- [ ] Set `NEXT_PUBLIC_TURNSTILE_SITE_KEY` at build time and `TURNSTILE_SECRET_KEY` as a Cloudflare Worker secret
+- [ ] Set `TURNSTILE_HOSTNAMES` to the exact production hostname(s) only (no `localhost` or `127.0.0.1`)
 
 ## CACHE
 
